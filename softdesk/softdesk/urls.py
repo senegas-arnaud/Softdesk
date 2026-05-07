@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from users.views import RegisterView, UserDetailView
+from users.views import RegisterView, UserDetailView, LogoutView
 from projects.views import ProjectListCreateView, ProjectDetailView, ContributorListCreateView, ContributorDestroyView, IssueListCreateView, IssueDetailView,CommentListCreateView,CommentDetailView
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/users/login/', TokenObtainPairView.as_view(), name='login'),
     path('api/users/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/users/me/', UserDetailView.as_view(), name='user-detail'),
+    path('api/users/logout/', LogoutView.as_view(), name='logout'),
     # Projects
     path('api/projects/', ProjectListCreateView.as_view(), name='project-list-create'),
     path('api/projects/<int:pk>/', ProjectDetailView.as_view(), name='project-detail'),
@@ -23,5 +24,5 @@ urlpatterns = [
     path('api/projects/<int:project_pk>/issues/<int:pk>/', IssueDetailView.as_view(), name='issue-detail'),
     # Comments
     path('api/projects/<int:project_pk>/issues/<int:issue_pk>/comments/', CommentListCreateView.as_view(), name='comment-list-create'),
-    path('api/projects/<int:project_pk>/issues/<int:issue_pk>/comments/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
+    path('api/projects/<int:project_pk>/issues/<int:issue_pk>/comments/<uuid:pk>/', CommentDetailView.as_view(), name='comment-detail'),
 ]

@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
+from rest_framework.exceptions import NotFound
 
 
 class ProjectListCreateView(generics.ListCreateAPIView):
@@ -69,10 +70,21 @@ class IssueListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Issue.objects.filter(project_id=self.kwargs['project_pk'])
+        project = Project.objects.filter(
+            pk=self.kwargs['project_pk'],
+            contributors__user=self.request.user
+        ).first()
+        if not project:
+            raise NotFound("Projet introuvable ou accès non autorisé.")
+        return Issue.objects.filter(project=project)
 
     def perform_create(self, serializer):
-        project = Project.objects.get(pk=self.kwargs['project_pk'])
+        project = Project.objects.filter(
+            pk=self.kwargs['project_pk'],
+            contributors__user=self.request.user
+        ).first()
+        if not project:
+            raise NotFound("Projet introuvable ou accès non autorisé.")
         serializer.save(author=self.request.user, project=project)
 
 
@@ -81,7 +93,13 @@ class IssueDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Issue.objects.filter(project_id=self.kwargs['project_pk'])
+        project = Project.objects.filter(
+            pk=self.kwargs['project_pk'],
+            contributors__user=self.request.user
+        ).first()
+        if not project:
+            raise NotFound("Projet introuvable ou accès non autorisé.")
+        return Issue.objects.filter(project=project)
 
     def update(self, request, *args, **kwargs):
         issue = self.get_object()
@@ -101,9 +119,21 @@ class CommentListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        project = Project.objects.filter(
+            pk=self.kwargs['project_pk'],
+            contributors__user=self.request.user
+        ).first()
+        if not project:
+            raise NotFound("Projet introuvable ou accès non autorisé.")
         return Comment.objects.filter(issue_id=self.kwargs['issue_pk'])
 
     def perform_create(self, serializer):
+        project = Project.objects.filter(
+            pk=self.kwargs['project_pk'],
+            contributors__user=self.request.user
+        ).first()
+        if not project:
+            raise NotFound("Projet introuvable ou accès non autorisé.")
         issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
         serializer.save(author=self.request.user, issue=issue)
 
@@ -113,6 +143,12 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        project = Project.objects.filter(
+            pk=self.kwargs['project_pk'],
+            contributors__user=self.request.user
+        ).first()
+        if not project:
+            raise NotFound("Projet introuvable ou accès non autorisé.")
         return Comment.objects.filter(issue_id=self.kwargs['issue_pk'])
 
     def update(self, request, *args, **kwargs):
