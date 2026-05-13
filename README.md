@@ -2,6 +2,14 @@
 
 API RESTful de gestion de tickets de support développée avec Django REST Framework.
 
+## Documentation API
+
+Un fichier `schema.yml` est fourni avec le projet et peut être importé sur
+[Swagger Editor](https://editor.swagger.io/) pour visualiser tous les endpoints disponibles.
+
+Il est également possible de générer une documentation à jour à tout moment
+en lançant le serveur et en accédant à : `http://127.0.0.1:8000/api/schema/`
+
 ## Authentification
 
 L'API utilise JWT (JSON Web Token). Pour accéder aux endpoints protégés :

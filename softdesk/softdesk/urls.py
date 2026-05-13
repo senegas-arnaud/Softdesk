@@ -3,6 +3,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.views import RegisterView, UserDetailView, LogoutView
 from projects.views import ProjectListCreateView, ProjectDetailView, ContributorListCreateView, ContributorDestroyView, IssueListCreateView, IssueDetailView,CommentListCreateView,CommentDetailView
+from drf_spectacular.views import SpectacularAPIView
 
 
 urlpatterns = [
@@ -25,4 +26,6 @@ urlpatterns = [
     # Comments
     path('api/projects/<int:project_pk>/issues/<int:issue_pk>/comments/', CommentListCreateView.as_view(), name='comment-list-create'),
     path('api/projects/<int:project_pk>/issues/<int:issue_pk>/comments/<uuid:pk>/', CommentDetailView.as_view(), name='comment-detail'),
+    # Doc
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 ]
