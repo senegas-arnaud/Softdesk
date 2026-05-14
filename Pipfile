@@ -8,6 +8,7 @@ django = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = {extras = ["crypto"], version = "*"}
 drf-spectacular = "*"
+django-filter = "*"
 
 [dev-packages]
 
