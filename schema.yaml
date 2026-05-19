@@ -7,6 +7,12 @@ paths:
     get:
       operationId: projects_list
       parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Quel champ utiliser pour classer les résultats.
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -149,6 +155,12 @@ paths:
     get:
       operationId: projects_contributors_list
       parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Quel champ utiliser pour classer les résultats.
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -227,6 +239,12 @@ paths:
     get:
       operationId: projects_issues_list
       parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Quel champ utiliser pour classer les résultats.
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -289,6 +307,12 @@ paths:
         schema:
           type: integer
         required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Quel champ utiliser pour classer les résultats.
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -949,6 +973,7 @@ components:
           type: integer
         project:
           type: integer
+          readOnly: true
         created_time:
           type: string
           format: date-time

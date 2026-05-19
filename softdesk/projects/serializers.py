@@ -15,7 +15,17 @@ class ContributorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contributor
         fields = ['id', 'user', 'project', 'created_time']
-        read_only_fields = ['created_time']
+        read_only_fields = ['created_time', 'project']
+
+    def validate(self, data):
+        project_pk = self.context['view'].kwargs.get('project_pk')
+        user = data.get('user')
+        
+        if Contributor.objects.filter(user=user, project_id=project_pk).exists():
+            raise serializers.ValidationError(
+                "Cet utilisateur est déjà contributeur de ce projet."
+            )
+        return data
 
 
 class IssueSerializer(serializers.ModelSerializer):
